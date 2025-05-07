@@ -34,6 +34,11 @@ from open_webui.routers.retrieval import ProcessFileForm, process_file
 from open_webui.routers.audio import transcribe
 from open_webui.storage.provider import Storage
 from open_webui.utils.auth import get_admin_user, get_verified_user
+
+from open_webui.config import (
+    STORAGE_PROVIDER_OBFUSCATE_FILENAME,
+)
+
 from pydantic import BaseModel
 
 log = logging.getLogger(__name__)
@@ -98,7 +103,13 @@ def upload_file(
         # replace filename with uuid
         id = str(uuid.uuid4())
         name = filename
-        filename = f"{id}_{filename}"
+        if STORAGE_PROVIDER_OBFUSCATE_FILENAME:
+            file_extension = os.path.splitext(filename)[1]
+            if not file_extension or len(file_extension) > 5 or not file_extension[1:].isalnum():
+                file_extension = ".obj"
+            filename = f"{id}{file_extension}"
+        else:
+            filename = f"{id}_{filename}"
         tags = {
             "OpenWebUI-User-Email": user.email,
             "OpenWebUI-User-Id": user.id,

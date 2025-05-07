@@ -753,6 +753,9 @@ LICENSE_KEY = os.environ.get("LICENSE_KEY", "")
 ####################################
 
 STORAGE_PROVIDER = os.environ.get("STORAGE_PROVIDER", "local")  # defaults to local, s3
+STORAGE_PROVIDER_OBFUSCATE_FILENAME = (
+    os.environ.get("STORAGE_PROVIDER_OBFUSCATE_FILENAME", "False").lower() == "true"
+)
 
 S3_ACCESS_KEY_ID = os.environ.get("S3_ACCESS_KEY_ID", None)
 S3_SECRET_ACCESS_KEY = os.environ.get("S3_SECRET_ACCESS_KEY", None)
